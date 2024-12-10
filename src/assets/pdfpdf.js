@@ -1,3 +1,5 @@
+const converter = require('number-to-words');
+
 export const pdfpdf = (formData) => {    
 	const {
         ConsumerNumber,
@@ -196,7 +198,7 @@ export const pdfpdf = (formData) => {
                         <p>MOB. +91${CustomerMobile}.
                         </p>
                         <p>Email Id: ${CustomerEmail}</p>
-                        <p>Subject: Estimate for ${CustomerReqKW} KW Solar Rooftop Project</p>
+                        <p style="font-weight: bold">Subject: Estimate for ${CustomerReqKW} KW Solar Rooftop Project</p>
                     </td>
                     <td colspan="2">
                         <p>Consumer Number
@@ -342,7 +344,7 @@ export const pdfpdf = (formData) => {
                                 <td><p class="bold-font"> ₹ ${totalWithSubsidy}</p></td>
                             </tr>
                             <tr>
-                                <td rowspan="3" colspan="5" class="left-text"><p> Total in Words :</p></td>
+                                <td rowspan="3" colspan="5" class="left-text"><p> Total in Words : ${converter.toWords((totalWithSubsidy - subsidyAmmount).toFixed(2))}</p></td>
                                 <td colspan="2"><p> Subsidy Get Back</p></td>
                                 <td><p> ₹ ${subsidyAmmount}</p></td>
                             </tr>

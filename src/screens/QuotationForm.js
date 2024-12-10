@@ -316,6 +316,26 @@ export default function Pddf() {
                   style={styles.inputText}
                   keyboardType="number-pad"
                 />
+                <Text style={styles.inputLable}>Current Phase</Text>
+
+                <Dropdown
+                  style={[styles.inputText, isFocus && { borderColor: 'blue' }]}
+                  placeholderStyle={styles.placeholderStyle}
+                  selectedTextStyle={styles.selectedTextStyle}
+                  inputSearchStyle={styles.inputSearchStyle}
+                  itemTextStyle={{ color: "black" }}
+                  data={[{ label: '1' }, { label: '3' }]}
+                  search
+                  maxHeight={300}
+                  labelField="label"
+                  valueField="label"
+                  placeholder={!isFocus ? 'Select item' : '...'}
+                  searchPlaceholder="Search..."
+                  value={values.noOfPhase}
+                  onChange={item => {
+                    setFieldValue("noOfPhase", item.label)
+                  }}
+                />
                 <Text style={styles.inputLable}>Meter Charge</Text>
 
                 <TextInput
@@ -355,8 +375,8 @@ export default function Pddf() {
                   keyboardType="number-pad"
                 />
 
-<View style={{marginBottom:20}}><CsButton name={"Create PDF"} color="#d268cc" onClick={handleSubmit} /></View>
-                
+                <View style={{ marginBottom: 20 }}><CsButton name={"Create PDF"} color="#d268cc" onClick={handleSubmit} /></View>
+
               </>
             )}
           </Formik>
