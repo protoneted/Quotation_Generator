@@ -1,50 +1,55 @@
 const converter = require('number-to-words');
 
-export const pdfpdf = (formData) => {    
-	const {
+export const pdfpdf = (formData) => {
+    const {
         ConsumerNumber,
-		CustomerName,
-		CustomerAddress,
-		CustomerMobile,
-		CustomerEmail,
-		NoOfPanel,
-		panelWattPeak,
-		sellingRate,
-		gstPercent,
-		noOfPhase,
-		meterCharges,
-		structureCharges,
-		panelBrandName,
-		panelBrandCharges,
-		inverterBrand,
-		inverterCapacity,
-		inverterCharges,
-		noOfMeter
-	} = formData;
+        CustomerName,
+        CustomerAddress,
+        CustomerMobile,
+        CustomerEmail,
+        Customertype,
+        NoOfPanel,
+        panelWattPeak,
+        sellingRate,
+        gstPercent,
+        noOfPhase,
+        meterCharges,
+        structureCharges,
+        panelBrandName,
+        panelBrandCharges,
+        inverterBrand,
+        inverterCapacity,
+        inverterCharges,
+        noOfMeter
+    } = formData;
 
-	const CustomerReqKW = (NoOfPanel * panelWattPeak / 1000).toFixed(2)
-	let subsidyAmmount;
+    const CustomerReqKW = (NoOfPanel * panelWattPeak / 1000).toFixed(2)
+    let subsidyAmmount;    
     const d = new Date();
-    const todayDate = `${d.getDate()}-${d.getMonth()}-${d.getFullYear()}`
-	if (CustomerReqKW <= 2) {
-		subsidyAmmount = (CustomerReqKW * 30000).toFixed(2)
-	} else if (CustomerReqKW > 2) {
-		if (CustomerReqKW > 3) {
-			subsidyAmmount = (2 * 30000 + 1 * 18000).toFixed(2);
-		} else if (CustomerReqKW <= 3) {
-			subsidyAmmount = (2 * 30000 + (3 - CustomerReqKW) * 18000).toFixed(2)
-		}
-	};
-	const taxableAmmount = (sellingRate * CustomerReqKW).toFixed(2)
-	const noOfPhaseText = noOfPhase == 1 ? 'single' : 'three';
-	const totalWithTax = Number(Number(taxableAmmount) + (taxableAmmount * gstPercent) / 100).toFixed(2)
-	const totalMeterCharge = (noOfMeter * meterCharges).toFixed(2);
-	const totalStructureCharge = (structureCharges * CustomerReqKW).toFixed(2)
-	const totalPanelBrandCharge = (panelBrandCharges * CustomerReqKW).toFixed(2)
-	const totalInverterBrandCharge = (inverterCharges * inverterCapacity).toFixed(2)
-	const totalWithSubsidy = (Number(totalWithTax) + Number(totalMeterCharge) + Number(totalStructureCharge) + Number(totalPanelBrandCharge) + Number(totalInverterBrandCharge)).toFixed(2)
-    
-	return `
+    const todayDate = `${d.getDate()}-${d.getMonth()+1}-${d.getFullYear()}`
+    if (Customertype === 'House-Hold') {
+        if (CustomerReqKW <= 2) {
+            subsidyAmmount = (CustomerReqKW * 30000).toFixed(2)
+        } else if (CustomerReqKW > 2) {
+            if (CustomerReqKW > 3) {
+                subsidyAmmount = (2 * 30000 + 1 * 18000).toFixed(2);
+            } else if (CustomerReqKW <= 3) {
+                subsidyAmmount = (2 * 30000 + (CustomerReqKW - 2) * 18000).toFixed(2)
+            }
+        };
+    } else {
+        subsidyAmmount = (CustomerReqKW * 18000).toFixed(2)
+    }
+    const taxableAmmount = (sellingRate * CustomerReqKW).toFixed(2)
+    const noOfPhaseText = noOfPhase == 1 ? 'single' : 'three';
+    const totalWithTax = Number(Number(taxableAmmount) + (taxableAmmount * gstPercent) / 100).toFixed(2)
+    const totalMeterCharge = (noOfMeter * meterCharges).toFixed(2);
+    const totalStructureCharge = (structureCharges * CustomerReqKW).toFixed(2)
+    const totalPanelBrandCharge = (panelBrandCharges * CustomerReqKW).toFixed(2)
+    const totalInverterBrandCharge = (inverterCharges * inverterCapacity).toFixed(2)
+    const totalWithSubsidy = (Number(totalWithTax) + Number(totalMeterCharge) + Number(totalStructureCharge) + Number(totalPanelBrandCharge) + Number(totalInverterBrandCharge)).toFixed(2)
+
+    return `
   <!DOCTYPE html>
 <html lang="en">
 
@@ -54,7 +59,7 @@ export const pdfpdf = (formData) => {
     <title>A4 Table Structure</title>
     <style>
         body {
-            display: flex;
+            display: block;
             justify-content: center;
             align-items: center;
             margin: 0;
@@ -268,8 +273,8 @@ export const pdfpdf = (formData) => {
                                 <tr><td><p> ₹ ${(sellingRate * gstPercent) / 100}</p></td></tr>
                                 <tr>
                                     <td><p> ₹ ${(Number(sellingRate) + Number(sellingRate * gstPercent) / 100).toFixed(2)}</p></td>
-                                    <td><p>${gstPercent} %</p></td>
-                                    <td><p>${gstPercent} %</p></td>
+                                    <td><p>${(gstPercent/2).toFixed(2)} %</p></td>
+                                    <td><p>${(gstPercent/2).toFixed(2)} %</p></td>
                                 </tr>
                                 <tr>
                                     <td rowspan="4"><p>2</p></td>
@@ -344,7 +349,7 @@ export const pdfpdf = (formData) => {
                                 <td><p class="bold-font"> ₹ ${totalWithSubsidy}</p></td>
                             </tr>
                             <tr>
-                                <td rowspan="3" colspan="5" class="left-text"><p> Total in Words : ${converter.toWords((totalWithSubsidy - subsidyAmmount).toFixed(2))}</p></td>
+                                <td rowspan="3" colspan="5" class="left-text"><p> Total in Words : ${converter.toWords(totalWithSubsidy)}</p></td>
                                 <td colspan="2"><p> Subsidy Get Back</p></td>
                                 <td><p> ₹ ${subsidyAmmount}</p></td>
                             </tr>
@@ -386,7 +391,7 @@ export const pdfpdf = (formData) => {
     <li> 5 Years Operational and Maintanace Warranty On System.</li>
     <li> Warranty On Products Will Depends On The Manufacturere's Terms & Condition.</li>
     <li> Any Physical Damage Wont't Be Considered In Warranty.</li>
-    <li> If You Have Any Questions Concerning This Invoice, Please Contact To 95043 95243</li>
+    <li> If You Have Any Questions Concerning This Quotation, Please Contact To 95043 95243</li>
 
  </ul>
 

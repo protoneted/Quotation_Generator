@@ -32,7 +32,7 @@ export default function Pddf() {
       const today = new Date();
       let PDFOptions = {
         html: `${htmlString}`,
-        fileName: `${(data.CustomerName.split(' '))[0]}_${today.getDate()}_${today.getMonth()}-${today.getHours()}_${today.getMinutes()}`,
+        fileName: `${(data.CustomerName.split(' '))[0]}_${today.getDate()}_${today.getMonth()+1}-${today.getHours()}_${today.getMinutes()}`,
         directory: Platform.OS === 'android' ? 'Downloadss' : 'Documents',
         base64: true,
       };
@@ -99,16 +99,17 @@ export default function Pddf() {
               CustomerAddress: "",
               CustomerEmail: "",
               CustomerMobile: "",
+              Customertype: "House-Hold",
               panelBrandName: `${panelBrandDetail[0].label}`,
               panelBrandCharges: "1000",
               NoOfPanel: "1",
               sellingRate: "42000",
               panelWattPeak: "575",
               inverterBrand: `${inverterBrandDetail[0].label}`,
-              inverterCapacity: "3.20",
+              inverterCapacity: "3.2",
               inverterCharges: "0",
               structureCharges: "4000",
-              meterCharges: "1000",
+              meterCharges: "3350",
               gstPercent: "13.8",
               noOfMeter: "1",
               noOfPhase: "1"
@@ -169,6 +170,27 @@ export default function Pddf() {
                   style={styles.inputText}
                   keyboardType="number-pad"
                 />
+
+<Text style={styles.inputLable}>Customer Type</Text>
+
+<Dropdown
+  style={[styles.inputText, isFocus && { borderColor: 'blue' }]}
+  placeholderStyle={styles.placeholderStyle}
+  selectedTextStyle={styles.selectedTextStyle}
+  inputSearchStyle={styles.inputSearchStyle}
+  itemTextStyle={{ color: "black" }}
+  data={[{ label: "House-Hold" }, { label: "Organization" }]}
+  search
+  maxHeight={300}
+  labelField="label"
+  valueField="label"
+  placeholder={!isFocus ? 'Select item' : '...'}
+  searchPlaceholder="Search..."
+  value={values.Customertype}
+  onChange={item => {
+    setFieldValue("Customertype", item.label)
+  }}
+/>
 
                 <Text style={styles.inputLable}>Panel Brand</Text>
 
@@ -291,7 +313,7 @@ export default function Pddf() {
                   selectedTextStyle={styles.selectedTextStyle}
                   inputSearchStyle={styles.inputSearchStyle}
                   itemTextStyle={{ color: "black" }}
-                  data={[{ label: '3.20' }, { label: '5.0' }]}
+                  data={[{ label: '3.2' },{ label: '4.0' },{ label: '4.2' }, { label: '4.6'},{ label: '5.0' },{ label: '5.4' },{ label: '6.0' },{ label: '7.0' },{ label: '8.0' },{ label: '10.0'}]}
                   search
                   maxHeight={300}
                   labelField="label"

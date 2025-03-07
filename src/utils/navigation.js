@@ -9,7 +9,7 @@ import HomeScreen from "../screens/HomeScreen";
 import RequestScreen from "../screens/RequestScreen";
 import { Image, View } from "react-native";
 import Images from "../assets/Images";
-import ProfileScreen from "../screens/profileScreen";
+import CustomerScreen from "../screens/CustomerScreen";
 import Quotation from "../screens/QuotationForm";
 import BillForm from "../screens/BillForm";
 import Pddf from "../screens/QuotationForm";
@@ -44,7 +44,7 @@ export const BottomNavigations = () => {
                         iconName = Images.tabHomeIcon
                     } else if (route.name === 'Requests') {
                         iconName = Images.tabRequestIcon
-                    } else if (route.name === 'Profile') {
+                    } else if (route.name === 'Customers') {
                         iconName = Images.tabProfileIcon
                     }
 
@@ -64,15 +64,15 @@ export const BottomNavigations = () => {
             })}>
             <Tab.Screen name="Home" component={HomeScreenStack} />
             <Tab.Screen name="Requests" component={FileList}/>
-            <Tab.Screen name="Profile" component={ProfileScreenStack} />
+            <Tab.Screen name="Customers" component={CustomerScreenStack} />
         </Tab.Navigator>
     )
 }
 
-export const ProfileScreenStack = () => {
+export const CustomerScreenStack = () => {
     return (
         <stack.Navigator>
-            <stack.Screen name='ProfileScreen' component={ProfileScreen} options={{ headerShown: false }} />
+            <stack.Screen name='CustomerScreen' component={CustomerScreen} options={{ headerShown: false }} />
         </stack.Navigator>
     )
 }
