@@ -1,5 +1,6 @@
 const converter = require('number-to-words');
-
+import {Images} from '../assets/Images'
+import { image0, image1, image2, image3 } from './base64Img';
 export const pdfpdf = (formData) => {
     const {
         ConsumerNumber,
@@ -46,8 +47,9 @@ export const pdfpdf = (formData) => {
     const totalMeterCharge = (noOfMeter * meterCharges).toFixed(2);
     const totalStructureCharge = (structureCharges * CustomerReqKW).toFixed(2)
     const totalPanelBrandCharge = (panelBrandCharges * CustomerReqKW).toFixed(2)
-    const totalInverterBrandCharge = (inverterCharges * inverterCapacity).toFixed(2)
+    const totalInverterBrandCharge = Number(inverterCharges).toFixed(2)
     const totalWithSubsidy = (Number(totalWithTax) + Number(totalMeterCharge) + Number(totalStructureCharge) + Number(totalPanelBrandCharge) + Number(totalInverterBrandCharge)).toFixed(2)
+console.log("imageimageimageimage",Images?.brousherImg0);
 
     return `
   <!DOCTYPE html>
@@ -63,7 +65,6 @@ export const pdfpdf = (formData) => {
             justify-content: center;
             align-items: center;
             margin: 0;
-            height: 100vh;
             background-color: #f0f0f0;
             /* Light gray background */
         }
@@ -340,7 +341,7 @@ export const pdfpdf = (formData) => {
                             <tr>
                                 <td colspan="3" class="left-text"><p>INVERTER <span>${inverterBrand}</span></p></td>
                                 <td colspan="2"><p> ${inverterCapacity} KW</p></td>
-                                <td><p>-</p></td>
+                                <td><p> ₹ ${totalInverterBrandCharge}</p></td>
                                 <td><p></p></td>
                             </tr>
                             <tr>
@@ -402,6 +403,18 @@ export const pdfpdf = (formData) => {
                 </tr>
             </tbody>
         </table>
+    </div>
+    <div class="a4-container">
+    <img src="${image0}" alt="" in a jacket" width="100%" height="100%">
+    </div>
+        <div class="a4-container">
+    <img src="${image1}" alt="" in a jacket" width="100%" height="100%">
+    </div>
+        <div class="a4-container">
+    <img src="${image2}" alt="" in a jacket" width="100%" height="100%">
+    </div>
+        <div class="a4-container">
+    <img src="${image3}" alt="" in a jacket" width="100%" height="100%">
     </div>
 </body>
 
