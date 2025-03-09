@@ -32,7 +32,7 @@ export default function Pddf() {
       const today = new Date();
       let PDFOptions = {
         html: `${htmlString}`,
-        fileName: `${(data.CustomerName.split(' '))[0]}_${today.getDate()}_${today.getMonth()+1}-${today.getHours()}_${today.getMinutes()}`,
+        fileName: `${(data.CustomerName.split(' '))[0]}_${today.getDate()}_${today.getMonth() + 1}-${today.getHours()}_${today.getMinutes()}`,
         directory: Platform.OS === 'android' ? 'Downloadss' : 'Documents',
         base64: true,
       };
@@ -171,26 +171,25 @@ export default function Pddf() {
                   keyboardType="number-pad"
                 />
 
-<Text style={styles.inputLable}>Customer Type</Text>
+                <Text style={styles.inputLable}>Customer Type</Text>
 
-<Dropdown
-  style={[styles.inputText, isFocus && { borderColor: 'blue' }]}
-  placeholderStyle={styles.placeholderStyle}
-  selectedTextStyle={styles.selectedTextStyle}
-  inputSearchStyle={styles.inputSearchStyle}
-  itemTextStyle={{ color: "black" }}
-  data={[{ label: "House-Hold" }, { label: "Organization" }]}
-  search
-  maxHeight={300}
-  labelField="label"
-  valueField="label"
-  placeholder={!isFocus ? 'Select item' : '...'}
-  searchPlaceholder="Search..."
-  value={values.Customertype}
-  onChange={item => {
-    setFieldValue("Customertype", item.label)
-  }}
-/>
+                <Dropdown
+                  style={[styles.inputText, isFocus && { borderColor: 'blue' }]}
+                  placeholderStyle={styles.placeholderStyle}
+                  selectedTextStyle={styles.selectedTextStyle}
+                  inputSearchStyle={styles.inputSearchStyle}
+                  itemTextStyle={{ color: "black" }}
+                  data={[{ label: "House-Hold" }, { label: "Organization" }]}
+                  search
+                  maxHeight={300}
+                  labelField="label"
+                  valueField="label"
+                  placeholder={values.Customertype ? values.Customertype : 'Select item'}
+                  searchPlaceholder="Search..."
+                  onChange={item => {
+                    setFieldValue("Customertype", item.label)
+                  }}
+                />
 
                 <Text style={styles.inputLable}>Panel Brand</Text>
 
@@ -205,9 +204,8 @@ export default function Pddf() {
                   maxHeight={300}
                   labelField="label"
                   valueField="label"
-                  placeholder={!isFocus ? 'Select item' : '...'}
+                  placeholder={values.panelBrandName ? values.panelBrandName : 'Select item'}
                   searchPlaceholder="Search..."
-                  value={values.panelBrandName}
                   onChange={item => {
                     setFieldValue("panelBrandName", item.label)
                   }}
@@ -225,6 +223,7 @@ export default function Pddf() {
                   style={styles.inputText}
                   keyboardType="number-pad"
                 />
+                
                 <Text style={styles.inputLable}>Number Of Panel</Text>
 
                 <Dropdown
@@ -239,9 +238,8 @@ export default function Pddf() {
                   maxHeight={300}
                   labelField="label"
                   valueField="label"
-                  placeholder={!isFocus ? 'Select item' : '...'}
+                  placeholder={values.NoOfPanel ? values.NoOfPanel : 'Select item'}
                   searchPlaceholder="Search..."
-                  value={values.NoOfPanel}
                   onChange={item => {
                     setFieldValue("NoOfPanel", item.label)
                   }}
@@ -262,9 +260,8 @@ export default function Pddf() {
                   maxHeight={300}
                   labelField="label"
                   valueField="label"
-                  placeholder={!isFocus ? 'Select item' : '...'}
+                  placeholder={values.panelWattPeak ? values.panelWattPeak : 'Select item'}
                   searchPlaceholder="Search..."
-                  value={values.panelWattPeak}
                   onChange={item => {
                     setFieldValue("panelWattPeak", item.label)
                   }}
@@ -296,9 +293,8 @@ export default function Pddf() {
                   maxHeight={300}
                   labelField="label"
                   valueField="label"
-                  placeholder={!isFocus ? 'Select item' : '...'}
+                  placeholder={values.inverterBrand ? values.inverterBrand : 'Select item'}
                   searchPlaceholder="Search..."
-                  value={values.inverterBrand}
                   onChange={item => {
                     setFieldValue("inverterBrand", item.label)
                   }}
@@ -313,14 +309,13 @@ export default function Pddf() {
                   selectedTextStyle={styles.selectedTextStyle}
                   inputSearchStyle={styles.inputSearchStyle}
                   itemTextStyle={{ color: "black" }}
-                  data={[{ label: '3.2' },{ label: '4.0' },{ label: '4.2' }, { label: '4.6'},{ label: '5.0' },{ label: '5.4' },{ label: '6.0' },{ label: '7.0' },{ label: '8.0' },{ label: '10.0'}]}
+                  data={[{ label: '3.2' }, { label: '4.0' }, { label: '4.2' }, { label: '4.6' }, { label: '5.0' }, { label: '5.4' }, { label: '6.0' }, { label: '7.0' }, { label: '8.0' }, { label: '10.0' }]}
                   search
                   maxHeight={300}
                   labelField="label"
                   valueField="label"
-                  placeholder={!isFocus ? 'Select item' : '...'}
+                  placeholder={values.inverterCapacity ? values.inverterCapacity : 'Select item'}
                   searchPlaceholder="Search..."
-                  value={values.inverterCapacity}
                   onChange={item => {
                     setFieldValue("inverterCapacity", item.label)
                   }}
@@ -351,9 +346,8 @@ export default function Pddf() {
                   maxHeight={300}
                   labelField="label"
                   valueField="label"
-                  placeholder={!isFocus ? 'Select item' : '...'}
+                  placeholder={values.noOfPhase ? values.noOfPhase : 'Select item'}
                   searchPlaceholder="Search..."
-                  value={values.noOfPhase}
                   onChange={item => {
                     setFieldValue("noOfPhase", item.label)
                   }}
@@ -458,6 +452,8 @@ const styles = StyleSheet.create({
   },
   placeholderStyle: {
     fontSize: 16,
+    color: 'black',
+    paddingHorizontal: 4
   },
   selectedTextStyle: {
     color: "black",

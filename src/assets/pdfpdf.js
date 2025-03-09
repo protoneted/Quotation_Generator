@@ -49,8 +49,7 @@ export const pdfpdf = (formData) => {
     const totalPanelBrandCharge = (panelBrandCharges * CustomerReqKW).toFixed(2)
     const totalInverterBrandCharge = Number(inverterCharges).toFixed(2)
     const totalWithSubsidy = (Number(totalWithTax) + Number(totalMeterCharge) + Number(totalStructureCharge) + Number(totalPanelBrandCharge) + Number(totalInverterBrandCharge)).toFixed(2)
-console.log("imageimageimageimage",Images?.brousherImg0);
-
+    
     return `
   <!DOCTYPE html>
 <html lang="en">
@@ -342,7 +341,7 @@ console.log("imageimageimageimage",Images?.brousherImg0);
                                 <td colspan="3" class="left-text"><p>INVERTER <span>${inverterBrand}</span></p></td>
                                 <td colspan="2"><p> ${inverterCapacity} KW</p></td>
                                 <td><p> ₹ ${totalInverterBrandCharge}</p></td>
-                                <td><p></p></td>
+                                <td><p> ₹ ${totalInverterBrandCharge}</p></td>
                             </tr>
                             <tr>
                                 <td><p>7</p></td>
