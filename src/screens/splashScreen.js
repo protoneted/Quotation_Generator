@@ -10,7 +10,7 @@ export default function SlpashScreen({ navigation }) {
     }, [])
 
 
-    const image = require("../assets/BrandLogo.png")
+    const image = require("../assets/BrandLogo.jpg")
     return (
         <View style={{ flex: 1 }}>
             <Image source={image} resizeMode="center" style={{ flex: 1, width: '100%', }} />
