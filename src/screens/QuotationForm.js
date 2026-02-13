@@ -22,6 +22,22 @@ import FileViewer from "react-native-file-viewer";
 export default function Pddf() {
   const isDarkMode = useColorScheme() === 'dark';
   const [isFocus, setIsFocus] = useState(false);
+   const [dropdownData, setDropdownData] = useState([
+    { label: '3.2' },
+    { label: '4.0' },
+    { label: '4.2' },
+    { label: '4.6' },
+    { label: '5.0' },
+    { label: '5.4' },
+    { label: '6.0' },
+    { label: '7.0' },
+    { label: '8.0' },
+    { label: '10.0' },
+  ]);
+
+  const [NoOfPanelArr, SetNoOfPanelArr] = useState(Array.from({ length: 100 }, (_, i) => {
+                    return { label: `${i + 1}` }
+  }))
 
   const backgroundStyle = {
     backgroundColor: Colors.lighter,
@@ -29,10 +45,11 @@ export default function Pddf() {
   const createPDF = async (data) => {
     try {
       const htmlString = pdfpdf(data);
+      const CustomerReqKW = (data.NoOfPanel * data.panelWattPeak / 1000).toFixed(2);
       const today = new Date();
       let PDFOptions = {
         html: `${htmlString}`,
-        fileName: `${(data.CustomerName.split(' '))[0]}_${today.getDate()}_${today.getMonth() + 1}-${today.getHours()}_${today.getMinutes()}`,
+        fileName: `${(data.CustomerName.split(' '))[0]}_${data.panelBrandName}_${CustomerReqKW}_${today.getDate()}_${today.getMonth() + 1}_${today.getFullYear()}`,
         directory: Platform.OS === 'android' ? 'Downloadss' : 'Documents',
         base64: true,
       };
@@ -66,10 +83,10 @@ export default function Pddf() {
   };
 
   const panelBrandDetail = [{ label: "ADANI", value: 1 }, { label: "WAARE", value: 2 }, { label: "GOLDI", value: 3 }, { label: "PAHAL", value: 4 }, { label: "REYZON", value: 5 }, { label: "TATA", value: 6 }]
-  const inverterBrandDetail = [{ label: "K SOLAR" }, { label: "DEYE" }, { label: "V SOLE" }, { label: "MINDRA" }, { label: "X WATT" }, { label: "OTHER" }]
+  const inverterBrandDetail = [{ label: "K SOLAR" }, { label: "DEYE" }, { label: "V SOLE" }, { label: "MINDRA" }, { label: "X WATT" }, { label: "SOLAR YAAN" }, { label: "OTHER" }]
   const getPanelCapacityRange = () => {
     const from = 540;
-    const to = 650;
+    const to = 1000;
     const array = [];
     for (let i = from; i <= to; i += 5) {
       array.push({ label: `${i}` })
@@ -105,12 +122,12 @@ export default function Pddf() {
               NoOfPanel: "1",
               sellingRate: "42000",
               panelWattPeak: "575",
-              inverterBrand: `${inverterBrandDetail[0].label}`,
+              inverterBrand: `${inverterBrandDetail[1].label}`,
               inverterCapacity: "3.2",
               inverterCharges: "0",
               structureCharges: "4000",
               meterCharges: "3350",
-              gstPercent: "13.8",
+              gstPercent: "8.9",
               noOfMeter: "1",
               noOfPhase: "1"
             }}
@@ -232,9 +249,8 @@ export default function Pddf() {
                   selectedTextStyle={styles.selectedTextStyle}
                   inputSearchStyle={styles.inputSearchStyle}
                   itemTextStyle={{ color: "black" }}
-                  data={Array.from({ length: 100 }, (_, i) => {
-                    return { label: `${i + 1}` }
-                  })} search
+                  data={NoOfPanelArr}
+                  search
                   maxHeight={300}
                   labelField="label"
                   valueField="label"
@@ -242,6 +258,10 @@ export default function Pddf() {
                   searchPlaceholder="Search..."
                   onChange={item => {
                     setFieldValue("NoOfPanel", item.label)
+                  }}
+                  onChangeText={(text) => {
+                    const newItem = { label: text };
+                    SetNoOfPanelArr([...NoOfPanelArr, newItem]);
                   }}
                 />
 
@@ -309,7 +329,7 @@ export default function Pddf() {
                   selectedTextStyle={styles.selectedTextStyle}
                   inputSearchStyle={styles.inputSearchStyle}
                   itemTextStyle={{ color: "black" }}
-                  data={[{ label: '3.2' }, { label: '4.0' }, { label: '4.2' }, { label: '4.6' }, { label: '5.0' }, { label: '5.4' }, { label: '6.0' }, { label: '7.0' }, { label: '8.0' }, { label: '10.0' }]}
+                  data={dropdownData}
                   search
                   maxHeight={300}
                   labelField="label"
@@ -318,6 +338,10 @@ export default function Pddf() {
                   searchPlaceholder="Search..."
                   onChange={item => {
                     setFieldValue("inverterCapacity", item.label)
+                  }}
+                  onChangeText={(text) => {
+                    const newItem = { label: text };
+                    setDropdownData([...dropdownData, newItem]);
                   }}
                 />
 

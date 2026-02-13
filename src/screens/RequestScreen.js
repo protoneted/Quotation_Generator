@@ -1,83 +1,146 @@
 import React, { useState, useCallback } from 'react';
-import { View, Text, Alert, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  Alert,
+  TouchableOpacity,
+  FlatList
+} from 'react-native';
 import RNFS from 'react-native-fs';
-import Share from 'react-native-share'
 import FileViewer from "react-native-file-viewer";
 import { useFocusEffect } from '@react-navigation/native';
 
-const FileList = ({ }) => {
-    const [files, setFiles] = useState([]);
-    const [key, setKey] = useState(0);
-    const contentPath = "/Downloadss"
-    const getFiles = (path) => {
+const FileList = () => {
 
-        // List files in the directory
-        RNFS.exists(path)
-            .then(async (exists) => {
-                if (exists) {
-                    try {
-                        const files = await RNFS.readDir(path); // e.g., RNFS.DocumentDirectoryPath
-                        setFiles(files);
-                    } catch (error) {
-                        Alert.alert('Error reading files:', error);
-                    }
-                } else {
-                    Alert.alert('File does not exist');
-                }
-            })
-            .catch((error) => {
-                Alert.alert('Error finding files:', error);
-            });
+  const [files, setFiles] = useState([]);
+  const contentPath = "/Downloadss";
 
-    };
+const getFiles = async (path) => {
+  try {
+    const exists = await RNFS.exists(path);
 
-    const handleClick = (selectedFile) => {
-        const options = { title: 'Share PDF', url: 'file://' + selectedFile.path, type: 'application/pdf', };
-        Alert.alert("", selectedFile.name, [{ 'text': 'Cancel', 'style': 'cancel' }, {
-            'text': 'Open', onPress: () => {
-                openFile(selectedFile.path)
-            }
-        }])
-        const openFile = (path) => {
-            FileViewer.open(path, {
-                showAppsSuggestions: true,
-                showOpenWithDialog: true
-            }) // absolute-path-to-my-local-file.
-                .then(() => {
-                    // success
-                })
-                .catch((error) => {
-                    Alert.alert("Error while Opening file", error);
-                });
-        }
-        // Share.open(options)
-        //     .then((res) => {
-        //         console.log(res);
-        //     })
-        //     .catch((err) => {
-        //         err && console.log(err);
-        //     });
+    if (exists) {
+      const fileList = await RNFS.readDir(path);
+
+      // 🔥 Sort by modified time (Newest first)
+      const sortedFiles = fileList.sort(
+        (a, b) => new Date(b.mtime) - new Date(a.mtime)
+      );
+
+      setFiles(sortedFiles);
+    } else {
+      Alert.alert('Folder does not exist');
     }
-    useFocusEffect(
-        useCallback(() => {
-            // Code to execute when the tab is focused 
+  } catch (error) {
+    Alert.alert('Error reading files', error.message);
+  }
+};
 
-            const path = `${RNFS.ExternalDirectoryPath}${contentPath}`;
 
-            getFiles(path);
-            setKey(prevKey => prevKey + 1);
-        }, []));
-    return (
-        <View style={{ flex: 1, paddingHorizontal: 20 }} key={key}>
-            {files.map((file, index) => (
-                <TouchableOpacity onPress={() => handleClick(file)} key={index}>
-                    <View style={{ width: '100%', borderWidth: 1, borderRadius: 7, padding: 10, marginBottom: 15 }}>
-                        <Text key={index} style={{ color: "black", fontWeight: '500', fontSize: 17 }}>{file.name}</Text>
-                    </View>
-                </TouchableOpacity>
-            ))}
-        </View>
+  const openFile = (path) => {
+    FileViewer.open(path, {
+      showAppsSuggestions: true,
+      showOpenWithDialog: true
+    }).catch((error) => {
+      Alert.alert("Error while Opening file", error.message);
+    });
+  };
+
+  const deleteFile = async (file) => {
+    Alert.alert(
+      "Delete File",
+      `Are you sure you want to delete ${file.name}?`,
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              await RNFS.unlink(file.path);
+              setFiles(prev => prev.filter(f => f.path !== file.path));
+            } catch (error) {
+              Alert.alert("Error deleting file", error.message);
+            }
+          }
+        }
+      ]
     );
+  };
+
+  const handleClick = (file) => {
+    Alert.alert("", file.name, [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Open', onPress: () => openFile(file.path) }
+    ]);
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      const path = `${RNFS.ExternalDirectoryPath}${contentPath}`;
+      getFiles(path);
+    }, [])
+  );
+
+  const renderItem = ({ item }) => (
+    <View
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderRadius: 7,
+        padding: 12,
+        marginBottom: 15
+      }}
+    >
+      {/* File Name */}
+      <TouchableOpacity
+        style={{ flex: 1 }}
+        onPress={() => handleClick(item)}
+      >
+        <Text
+          style={{
+            color: "black",
+            fontWeight: '500',
+            fontSize: 16
+          }}
+          numberOfLines={1}
+        >
+          {item.name}
+        </Text>
+      </TouchableOpacity>
+
+      {/* Delete Button */}
+      <TouchableOpacity
+        onPress={() => deleteFile(item)}
+        style={{
+          marginLeft: 10,
+          paddingHorizontal: 10,
+          paddingVertical: 6,
+          backgroundColor: '#ff4d4d',
+          borderRadius: 5
+        }}
+      >
+        <Text style={{ color: 'white', fontWeight: 'bold' }}>
+          Delete
+        </Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  return (
+    <FlatList
+      data={files}
+      keyExtractor={(item) => item.path}
+      renderItem={renderItem}
+      contentContainerStyle={{
+        paddingHorizontal: 20,
+        paddingVertical: 10
+      }}
+      showsVerticalScrollIndicator={true}
+    />
+  );
 };
 
 export default FileList;

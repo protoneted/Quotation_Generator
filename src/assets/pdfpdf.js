@@ -1,5 +1,4 @@
 const converter = require('number-to-words');
-import {Images} from '../assets/Images'
 import { image0, image1, image2, image3 } from './base64Img';
 export const pdfpdf = (formData) => {
     const {
@@ -25,9 +24,9 @@ export const pdfpdf = (formData) => {
     } = formData;
 
     const CustomerReqKW = (NoOfPanel * panelWattPeak / 1000).toFixed(2)
-    let subsidyAmmount;    
+    let subsidyAmmount;
     const d = new Date();
-    const todayDate = `${d.getDate()}-${d.getMonth()+1}-${d.getFullYear()}`
+    const todayDate = `${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}`
     if (Customertype === 'House-Hold') {
         if (CustomerReqKW <= 2) {
             subsidyAmmount = (CustomerReqKW * 30000).toFixed(2)
@@ -48,8 +47,9 @@ export const pdfpdf = (formData) => {
     const totalStructureCharge = (structureCharges * CustomerReqKW).toFixed(2)
     const totalPanelBrandCharge = (panelBrandCharges * CustomerReqKW).toFixed(2)
     const totalInverterBrandCharge = Number(inverterCharges).toFixed(2)
-    const totalWithSubsidy = (Number(totalWithTax) + Number(totalMeterCharge) + Number(totalStructureCharge) + Number(totalPanelBrandCharge) + Number(totalInverterBrandCharge)).toFixed(2)
-    
+    const totalWithSubsidy = (Number(totalWithTax) + Number(totalMeterCharge) + Number(totalStructureCharge) + Number(totalPanelBrandCharge) + Number(totalInverterBrandCharge)).toFixed(2);
+    const randomNumber = Math.floor(10000 + Math.random() * 90000);
+
     return `
   <!DOCTYPE html>
 <html lang="en">
@@ -172,9 +172,9 @@ export const pdfpdf = (formData) => {
                     </td>
                     <td colspan="3">
                         <h2>Sita Enterprise</h2>
-                        <p>264,CENTRAL MALL,NAVSARI</p>
+                        <p>268,CENTRAL MALL,NAVSARI</p>
                         <p>Vishnu Desai - 9504395243</p>
-                        <h4>GSTIN : 24COHpp391c1z6</h4>
+                        <h4>GSTIN : 24CRHPD3718C2ZA</h4>
                         <p>E-mail: <a href="">sitaenterprise.sales@gmail.com</a></p>
                     </td>
                     <td colspan="1">
@@ -182,14 +182,14 @@ export const pdfpdf = (formData) => {
                         <p>No:</p>
                         <p>Date:</p>
                         <p>SALES PERSON:</p>
-                        <p>PO No.:</p>
+                        <p>Phone No.:</p>
                     </td>
                     <td colspan="2">
                         <p>-</p>
-                        <p>-</p>
+                        <p>${randomNumber}</p>
                         <p>${todayDate}</p>
                         <p>Vishnu Desai</p>
-                        <p>###</p>
+                        <p>9504395243</p>
                     </td>
                 </tr>
                 <tr style="height: 13%;">
@@ -234,7 +234,7 @@ export const pdfpdf = (formData) => {
                     <td colspan="8">
                         <table class="inner-table">
                             <tbody>
-                                <tr>
+                                <tr style="background-color: #c3daf5ff;">
                                     <td>
                                         <p class="bold-font">Sr No.</p>
                                     </td>
@@ -273,8 +273,8 @@ export const pdfpdf = (formData) => {
                                 <tr><td><p> ₹ ${(sellingRate * gstPercent) / 100}</p></td></tr>
                                 <tr>
                                     <td><p> ₹ ${(Number(sellingRate) + Number(sellingRate * gstPercent) / 100).toFixed(2)}</p></td>
-                                    <td><p>${(gstPercent/2).toFixed(2)} %</p></td>
-                                    <td><p>${(gstPercent/2).toFixed(2)} %</p></td>
+                                    <td><p>${(gstPercent / 2).toFixed(2)} %</p></td>
+                                    <td><p>${(gstPercent / 2).toFixed(2)} %</p></td>
                                 </tr>
                                 <tr>
                                     <td rowspan="4"><p>2</p></td>
@@ -368,18 +368,32 @@ export const pdfpdf = (formData) => {
                 <tr style="height: 32%;">
                     <td colspan="8">
                         <div class="bottom-table">
-                        <h3>Required Documents List</h3>
+                        <h3 style="padding-top: 10px">Required Documents List</h3>
                         <table style="margin-left: 25px; margin-bottom: 10px;">
                             <tbody>
                                 <tr>
                                     <td><p>Adhar Card</p></td>
                                     <td><p>Vera Bill</p></td>
                                     <td><p>Cancel Cheq</p></td>
+                                    <td  style="background-color: #92b8e4ff;"><p>SITA ENTERPRISE</p></td>
                                 </tr>
                                 <tr>
                                     <td><p>Electricity bill</p></td>
                                     <td><p>PAN Card</p></td>
                                     <td><p>Passport Size Photo</p></td>
+                                    <td  style="background-color: #92b8e4ff;"><p>A/C NO -24880200001631</p></td>
+                                </tr>
+                                 <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td  style="background-color: #92b8e4ff;"><p>IFSC - FDRL0002488</p></td>
+                                </tr>
+                                 <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td  style="background-color: #92b8e4ff;"><p>THE FEDERAL BANK LTD</p></td>
                                 </tr>
                             </tbody>
                         </table>
