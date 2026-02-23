@@ -4,7 +4,8 @@ import {
   Text,
   Alert,
   TouchableOpacity,
-  FlatList
+  FlatList,
+  TextInput
 } from 'react-native';
 import RNFS from 'react-native-fs';
 import FileViewer from "react-native-file-viewer";
@@ -13,7 +14,13 @@ import { useFocusEffect } from '@react-navigation/native';
 const FileList = () => {
 
   const [files, setFiles] = useState([]);
+  const [searchText, setSearchText] = useState("");
+
   const contentPath = "/Downloadss";
+
+  const filteredFiles = files.filter(file =>
+  file.name.toLowerCase().includes(searchText.toLowerCase())
+);
 
 const getFiles = async (path) => {
   try {
@@ -105,7 +112,7 @@ const getFiles = async (path) => {
             fontWeight: '500',
             fontSize: 16
           }}
-          numberOfLines={1}
+          numberOfLines={2}
         >
           {item.name}
         </Text>
@@ -129,9 +136,29 @@ const getFiles = async (path) => {
     </View>
   );
 
-  return (
+return (
+  <View style={{ flex: 1 }}>
+    
+    {/* 🔍 Search Bar */}
+    <TextInput
+      placeholder="Search files..."
+      value={searchText}
+      onChangeText={setSearchText}
+      style={{
+        marginHorizontal: 20,
+        marginTop: 15,
+        marginBottom: 10,
+        paddingHorizontal: 15,
+        paddingVertical: 10,
+        borderWidth: 1,
+        borderRadius: 8,
+        borderColor: "#ccc",
+        backgroundColor: "#fff"
+      }}
+    />
+
     <FlatList
-      data={files}
+      data={filteredFiles}   // 👈 use filtered list
       keyExtractor={(item) => item.path}
       renderItem={renderItem}
       contentContainerStyle={{
@@ -139,8 +166,15 @@ const getFiles = async (path) => {
         paddingVertical: 10
       }}
       showsVerticalScrollIndicator={true}
+      ListEmptyComponent={
+        <Text style={{ textAlign: 'center', marginTop: 20 }}>
+          No files found
+        </Text>
+      }
     />
-  );
+  </View>
+);
+
 };
 
 export default FileList;

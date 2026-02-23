@@ -37,8 +37,10 @@ export const pdfpdf = (formData) => {
                 subsidyAmmount = (2 * 30000 + (CustomerReqKW - 2) * 18000).toFixed(2)
             }
         };
-    } else {
+    } else if(Customertype === 'Organization') {
         subsidyAmmount = (CustomerReqKW * 18000).toFixed(2)
+    } else {
+        subsidyAmmount = 0;
     }
     const taxableAmmount = (sellingRate * CustomerReqKW).toFixed(2)
     const noOfPhaseText = noOfPhase == 1 ? 'single' : 'three';

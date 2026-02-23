@@ -47,9 +47,10 @@ export default function Pddf() {
       const htmlString = pdfpdf(data);
       const CustomerReqKW = (data.NoOfPanel * data.panelWattPeak / 1000).toFixed(2);
       const today = new Date();
+      const trimmedName = data.CustomerName?.trim().replace(/\s+/g, " ");
       let PDFOptions = {
         html: `${htmlString}`,
-        fileName: `${(data.CustomerName.split(' '))[0]}_${data.panelBrandName}_${CustomerReqKW}_${today.getDate()}_${today.getMonth() + 1}_${today.getFullYear()}`,
+        fileName: `${(trimmedName?.split(' '))[0]}_${(trimmedName?.split(' '))?.[1]?.[0]}_${data.panelBrandName}_${CustomerReqKW}_${today.getDate()}_${today.getMonth() + 1}_${today.getFullYear()}`,
         directory: Platform.OS === 'android' ? 'Downloadss' : 'Documents',
         base64: true,
       };
@@ -196,7 +197,7 @@ export default function Pddf() {
                   selectedTextStyle={styles.selectedTextStyle}
                   inputSearchStyle={styles.inputSearchStyle}
                   itemTextStyle={{ color: "black" }}
-                  data={[{ label: "House-Hold" }, { label: "Organization" }]}
+                  data={[{ label: "House-Hold" }, { label: "Organization" }, { label: "Commercial" }]}
                   search
                   maxHeight={300}
                   labelField="label"
