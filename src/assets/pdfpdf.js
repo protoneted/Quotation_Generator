@@ -1,6 +1,6 @@
 const converter = require('number-to-words');
 import { image0, image1, image2, image3 } from './base64Img';
-export const pdfpdf = (formData) => {
+export const pdfpdf = (formData, isLoanModeEnabled) => {
     const {
         ConsumerNumber,
         CustomerName,
@@ -419,18 +419,20 @@ export const pdfpdf = (formData) => {
             </tbody>
         </table>
     </div>
-    <div class="a4-container">
+
+    ${!isLoanModeEnabled ? `<div class="a4-container">
     <img src="${image0}" alt="" in a jacket" width="100%" height="100%">
     </div>
-        <div class="a4-container">
+    <div class="a4-container">
     <img src="${image1}" alt="" in a jacket" width="100%" height="100%">
     </div>
-        <div class="a4-container">
+    <div class="a4-container">
     <img src="${image2}" alt="" in a jacket" width="100%" height="100%">
     </div>
-        <div class="a4-container">
+    <div class="a4-container">
     <img src="${image3}" alt="" in a jacket" width="100%" height="100%">
-    </div>
+    </div>`: ""}
+
 </body>
 
 </html>

@@ -90,6 +90,7 @@ const getFiles = async (path) => {
   );
 
   const renderItem = ({ item }) => (
+    item.name=='Bill' ? null :
     <View
       style={{
         flexDirection: 'row',

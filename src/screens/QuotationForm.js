@@ -9,6 +9,7 @@ import {
   Platform,
   TextInput,
   Alert,
+  Switch
 } from 'react-native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
@@ -22,6 +23,9 @@ import FileViewer from "react-native-file-viewer";
 export default function Pddf() {
   const isDarkMode = useColorScheme() === 'dark';
   const [isFocus, setIsFocus] = useState(false);
+  const [isLoanModeEnabled, setIsLoanModeEnabled] = useState(false);
+  const toggleSwitch = () => setIsLoanModeEnabled(previousState => !previousState);
+
    const [dropdownData, setDropdownData] = useState([
     { label: '3.2' },
     { label: '4.0' },
@@ -42,9 +46,9 @@ export default function Pddf() {
   const backgroundStyle = {
     backgroundColor: Colors.lighter,
   };
-  const createPDF = async (data) => {
+  const createPDF = async (data, isLoanMode) => {
     try {
-      const htmlString = pdfpdf(data);
+      const htmlString = pdfpdf(data, isLoanMode);
       const CustomerReqKW = (data.NoOfPanel * data.panelWattPeak / 1000).toFixed(2);
       const today = new Date();
       const trimmedName = data.CustomerName?.trim().replace(/\s+/g, " ");
@@ -110,6 +114,16 @@ export default function Pddf() {
             },
             styles.container,
           ]}>
+          <Text style={{ alignSelf: 'flex-end', marginRight: 15, color: '#000' }}
+          >{isLoanModeEnabled ? 'For Loan' : 'For Customer'}</Text>
+          <Switch
+            style={{ alignSelf: 'flex-end', marginRight: 15 }}
+            trackColor={{ false: '#767577', true: '#81b0ff' }}
+            thumbColor={isLoanModeEnabled ? '#f5dd4b' : '#f4f3f4'}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={toggleSwitch}
+            value={isLoanModeEnabled}
+          />
           <Formik
             initialValues={{
               ConsumerNumber: "-",
@@ -133,7 +147,7 @@ export default function Pddf() {
               noOfPhase: "1"
             }}
             onSubmit={values => {
-              createPDF(values)
+              createPDF(values, isLoanModeEnabled)
             }}
           >
             {({ handleChange, handleBlur, handleSubmit, values, setFieldValue }) => (

@@ -19,7 +19,7 @@ export default function BillForm({ navigation }) {
             const trimmedName = data.name?.trim().replace(/\s+/g, " ");
             let PDFOptions = {
                 html: `${htmlString}`,
-                fileName: `${(trimmedName?.split(' '))[0]}_${(trimmedName?.split(' '))?.[1]?.[0]}_${data.capacity}_${today.getDate()}_${today.getMonth() + 1}_${today.getFullYear()}`,
+                fileName: `${(trimmedName?.split(' '))[0]}_${(trimmedName?.split(' '))?.[1]?.[0]}_${data.billNo}_${today.getDate()}_${today.getMonth() + 1}_${today.getFullYear()}`,
                 directory: Platform.OS === 'android' ? 'Downloadss/Bill' : 'Documents/Bill',
                 base64: true,
             };

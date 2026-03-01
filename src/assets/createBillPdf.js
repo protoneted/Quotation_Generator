@@ -1,7 +1,5 @@
-// const converter = require('number-to-words');
-export const billPdf = (formData) => {
-    console.log("formDataformDataformDataformData",formData);
-    
+const converter = require('number-to-words');
+export const billPdf = (formData) => {    
     const {
         name = '',
         address = '',
@@ -28,6 +26,7 @@ export const billPdf = (formData) => {
     const installationWithoutGstAmount = (Number(InstallationCharges) - Number(installationGstAmount)).toFixed(2) || 0;
     const maintainanceGstAmount = (Number(maintainanceCharges) * Number(maintainanceGst) / (100+Number(maintainanceGst))).toFixed(2) || 0;
     const maintainanceWithoutGstAmount = (Number(maintainanceCharges) - Number(maintainanceGstAmount)).toFixed(2) || 0;
+    const grandTotalAmount = (Number(solarRate) + Number(InstallationCharges) + Number(maintainanceCharges)).toFixed(2) || 0;
     return `
    <!DOCTYPE html>
 <html>
@@ -143,7 +142,7 @@ td.left {
 .summary {
   width: 40%;
   margin-left: auto;
-  margin-top: 20px;
+  margin-top: 8px;
   font-size: 14px;
 }
 
@@ -159,7 +158,7 @@ td.left {
 
 /* 🔥 Bank + Signature Section */
 .bank-signature-section {
-  margin-top: 40px;
+  margin-top: 20px;
   padding-top: 15px;
   border-top: 1px solid #ccc;
   display: flex;
@@ -190,11 +189,16 @@ td.left {
   opacity: 0.85;  /* Slightly faded for realistic look */
 }
 
-/* Declaration */
-.declaration {
-  margin-top: 20px;
+/* amountInWords */
+.amountInWords{
   font-size: 13px;
 }
+.declaration{
+  font-size: 13px;
+    border-top: 1px solid #ccc;
+
+}
+
 </style>
 
 </head>
@@ -216,10 +220,12 @@ td.left {
       </div>
 
       <div class="company">
-        <h2> SITA ENTERPRISE</h2>
+        <h1> SITA ENTERPRISE</h1>
         268, Central Bazzar Mall, Navsari-396445<br>
-        Phone: +91  9504395243<br>
-        Email: sitaenterprise.sales@gmail.com<br>
+        Email: <a href="mailto:sitaenterprise.sales@gmail.com">
+  sitaenterprise.sales@gmail.com
+</a><br>
+        Phone: +91 9504395243<br>
         GSTIN: 24CRHPD3718C2ZA
       </div>
 
@@ -235,10 +241,10 @@ td.left {
     <!-- Customer -->
     <div class="customer">
       <strong>Bill To:</strong><br>
-      ${name}<br>
-      ${address}<br>
-      ${phNo}<br>
-      GSTIN: ${gst}
+      <span style="font-size: 14px">Name</span>:- <strong>${name}</strong><br>
+      <span style="font-size: 14px">Address</span>:- ${address}<br>
+      <span style="font-size: 14px">Phone</span>:- ${phNo}<br>
+      <span style="font-size: 14px">GSTIN</span>: ${gst}
     </div>
 
     <!-- Items -->
@@ -272,7 +278,7 @@ td.left {
           <td>1</td>
           <td class="left">Installation and Commission</td>
           <td>998732</td>
-          <td>1</td>
+          <td>2</td>
           <td>${installationWithoutGstAmount}</td>
           <td>${installationWithoutGstAmount}</td>
           <td>${installationGst}%</td>
@@ -280,7 +286,7 @@ td.left {
           <td>${Number(InstallationCharges)}</td>
         </tr>
         <tr>
-          <td>1</td>
+          <td>3</td>
           <td class="left">Maintenance contract</td>
           <td>9987</td>
           <td>1</td>
@@ -305,15 +311,13 @@ td.left {
       </tr>
       <tr class="total">
         <td>Grand Total:</td>
-        <td>₹ ${(Number(solarRate) + Number(InstallationCharges) + Number(maintainanceCharges)).toFixed(2)}</td>
+        <td>₹ ${grandTotalAmount}</td>
+      </tr>
+        <tr class="total">
+        <td>Grand Total In Words:</td>
+        <td>₹ ${converter.toWords(String(grandTotalAmount))}</td>
       </tr>
     </table>
-
-    <!-- Declaration -->
-    <div class="declaration">
-      <strong>Declaration:</strong><br>
-      We declare that this invoice shows the actual price of goods/services described and that all particulars are true and correct.
-    </div>
 
     <!-- 🔥 Separate Bank & Signature Section -->
     <div class="bank-signature-section">
@@ -324,8 +328,7 @@ td.left {
         Account Name: Sita Enterprise<br>
         Account Number: 24880200001631<br>
         IFSC Code: FDRL0002488<br>
-        <br/>
-        <h4>TERMS & CONDITIONS</h4>
+        <h4 style="border-top: 1px solid #ccc;">TERMS & CONDITIONS</h4>
   <ul>
     <li>${panelWarranty} Years Performance Warranty On Solar Panels.</li>
     <li>${inverterWarranty} Year Warranty On Solar On-Grid Inverter.</li>
@@ -334,6 +337,10 @@ td.left {
     <li>Any Physical Damage Won't Be Considered In Warranty.</li>
     <li>If You Have Any Questions Concerning This Invoice, Please Contact Vishnu Desai Patel on: +91 9504395243.</li>
   </ul>
+      <div class="declaration">
+      <strong>Declaration:</strong><br>
+      We declare that this invoice shows the actual price of goods/services described and that all particulars are true and correct.
+    </div>
         </div>
 
       <div class="signature">
