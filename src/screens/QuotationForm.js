@@ -88,7 +88,7 @@ export default function Pddf() {
   };
 
   const panelBrandDetail = [{ label: "ADANI", value: 1 }, { label: "WAARE", value: 2 }, { label: "GOLDI", value: 3 }, { label: "PAHAL", value: 4 }, { label: "REYZON", value: 5 }, { label: "TATA", value: 6 }]
-  const inverterBrandDetail = [{ label: "K SOLAR" }, { label: "DEYE" }, { label: "V SOLE" }, { label: "MINDRA" }, { label: "X WATT" }, { label: "SOLAR YAAN" }, { label: "OTHER" }]
+  const inverterBrandDetail = [{ label: "K SOLAR" }, { label: "DEYE" }, { label: "V SOLE" }, { label: "MINDRA" }, { label: "X WATT" }, { label: "SOLAR YAAN" },{ label: "POLYCAB" },{label:"HAVELLS"}, { label: "OTHER" }]
   const getPanelCapacityRange = () => {
     const from = 540;
     const to = 1000;
@@ -150,8 +150,32 @@ export default function Pddf() {
               createPDF(values, isLoanModeEnabled)
             }}
           >
-            {({ handleChange, handleBlur, handleSubmit, values, setFieldValue }) => (
-              <>
+            {({ handleChange, handleBlur, handleSubmit, values, setFieldValue }) => {
+              const CustomerReqKW = (values.NoOfPanel * values.panelWattPeak / 1000).toFixed(2)
+    let subsidyAmmount;
+    if (values.Customertype === 'House-Hold') {
+        if (CustomerReqKW <= 2) {
+            subsidyAmmount = (CustomerReqKW * 30000).toFixed(2)
+        } else if (CustomerReqKW > 2) {
+            if (CustomerReqKW > 3) {
+                subsidyAmmount = (2 * 30000 + 1 * 18000).toFixed(2);
+            } else if (CustomerReqKW <= 3) {
+                subsidyAmmount = (2 * 30000 + (CustomerReqKW - 2) * 18000).toFixed(2)
+            }
+        };
+    } else if(values.Customertype === 'Organization') {
+        subsidyAmmount = (CustomerReqKW * 18000).toFixed(2)
+    } else {
+        subsidyAmmount = 0;
+    }
+    const taxableAmmount = (values.sellingRate * CustomerReqKW).toFixed(2)
+    const totalWithTax = Number(Number(taxableAmmount) + (taxableAmmount * values.gstPercent) / 100).toFixed(2)
+    const totalMeterCharge = (values.noOfMeter * values.meterCharges).toFixed(2);
+    const totalStructureCharge = (values.structureCharges * CustomerReqKW).toFixed(2)
+    const totalPanelBrandCharge = (values.panelBrandCharges * CustomerReqKW).toFixed(2)
+    const totalInverterBrandCharge = Number(values.inverterCharges).toFixed(2)
+    const totalWithSubsidy = (Math.round(Number(totalWithTax) + Number(totalMeterCharge) + Number(totalStructureCharge) + Number(totalPanelBrandCharge) + Number(totalInverterBrandCharge))).toFixed(2);
+              return <>
                 <Text style={styles.inputLable}>Consumer Number</Text>
                 <TextInput
                   placeholder="Enter Consumer Number"
@@ -430,10 +454,10 @@ export default function Pddf() {
                   keyboardType="number-pad"
                 />
 
-                <View style={{ marginBottom: 20 }}><CsButton name={"Create PDF"} color="#d268cc" onClick={handleSubmit} /></View>
+                <View style={{ marginBottom: 20 }}><CsButton name={totalWithSubsidy} color="#d268cc" onClick={handleSubmit} /></View>
 
-              </>
-            )}
+              </>              
+            }}
           </Formik>
         </View>
       </ScrollView>

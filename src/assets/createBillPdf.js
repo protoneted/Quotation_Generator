@@ -1,33 +1,33 @@
 const converter = require('number-to-words');
-export const billPdf = (formData) => {    
-    const {
-        name = '',
-        address = '',
-        date = '',
-        billNo = '',
-        phNo = '',
-        gst = '',
-        capacity='',
-        solarRate = 0,
-        solarGst = 5,
-        InstallationCharges = 0,
-        installationGst = 18,
-        maintainanceCharges = 0,
-        maintainanceGst = 18,
-        panelWarranty,
-        inverterWarranty,
-        afterInstallWarranty
-    } = formData;
+export const billPdf = (formData) => {
+  const {
+    name = '',
+    address = '',
+    date = '',
+    billNo = '',
+    phNo = '',
+    gst = '',
+    capacity = '',
+    solarRate = 0,
+    solarGst = 5,
+    InstallationCharges = 0,
+    installationGst = 18,
+    maintainanceCharges = 0,
+    maintainanceGst = 18,
+    panelWarranty,
+    inverterWarranty,
+    afterInstallWarranty
+  } = formData;
 
-    // const solarGstAmount = (Number(solarRate) * Number(solarGst) / 100).toFixed(2) || 0;
-    const solarGstAmount = (Number(solarRate) * Number(solarGst)/(100+Number(solarGst))).toFixed(2)
-    const solarWithoutGst = (Number(solarRate)-Number(solarGstAmount)).toFixed(2)
-    const installationGstAmount = (Number(InstallationCharges) * Number(installationGst) / (100+Number(installationGst))).toFixed(2) || 0;
-    const installationWithoutGstAmount = (Number(InstallationCharges) - Number(installationGstAmount)).toFixed(2) || 0;
-    const maintainanceGstAmount = (Number(maintainanceCharges) * Number(maintainanceGst) / (100+Number(maintainanceGst))).toFixed(2) || 0;
-    const maintainanceWithoutGstAmount = (Number(maintainanceCharges) - Number(maintainanceGstAmount)).toFixed(2) || 0;
-    const grandTotalAmount = (Number(solarRate) + Number(InstallationCharges) + Number(maintainanceCharges)).toFixed(2) || 0;
-    return `
+  // const solarGstAmount = (Number(solarRate) * Number(solarGst) / 100).toFixed(2) || 0;
+  const solarGstAmount = (Number(solarRate) * Number(solarGst) / (100 + Number(solarGst))).toFixed(2)
+  const solarWithoutGst = (Number(solarRate) - Number(solarGstAmount)).toFixed(2)
+  const installationGstAmount = (Number(InstallationCharges) * Number(installationGst) / (100 + Number(installationGst))).toFixed(2) || 0;
+  const installationWithoutGstAmount = (Number(InstallationCharges) - Number(installationGstAmount)).toFixed(2) || 0;
+  const maintainanceGstAmount = (Number(maintainanceCharges) * Number(maintainanceGst) / (100 + Number(maintainanceGst))).toFixed(2) || 0;
+  const maintainanceWithoutGstAmount = (Number(maintainanceCharges) - Number(maintainanceGstAmount)).toFixed(2) || 0;
+  const grandTotalAmount = (Number(solarRate) + Number(InstallationCharges) + Number(maintainanceCharges)).toFixed(2) || 0;
+  return `
    <!DOCTYPE html>
 <html>
 <head>
@@ -221,7 +221,7 @@ td.left {
 
       <div class="company">
         <h1> SITA ENTERPRISE</h1>
-        268, Central Bazzar Mall, Navsari-396445<br>
+        G-1, Shiv Darshan Apartment,Opp. Ujjivan Bank, Lunsikui Road, Navsari-396445<br>
         Email: <a href="mailto:sitaenterprise.sales@gmail.com">
   sitaenterprise.sales@gmail.com
 </a><br>
@@ -265,20 +265,20 @@ td.left {
       <tbody>
         <tr>
           <td>1</td>
-          <td class="left">SOLAR POWER GENERATION SYSTEM OF CAPACITY ${capacity} KW</td>
+          <td class="left">Solar power generation system of capacity ${capacity} kw</td>
           <td>85414300</td>
           <td>1</td>
           <td>${solarWithoutGst}</td>
           <td>${solarWithoutGst}</td>
           <td>${solarGst}%</td>
           <td>${solarGstAmount}</td>
-          <td>${ Number(solarRate)}</td>
+          <td>${Number(solarRate)}</td>
         </tr>
         <tr>
-          <td>1</td>
+          <td>2</td>
           <td class="left">Installation and Commission</td>
           <td>998732</td>
-          <td>2</td>
+          <td>1</td>
           <td>${installationWithoutGstAmount}</td>
           <td>${installationWithoutGstAmount}</td>
           <td>${installationGst}%</td>
@@ -335,7 +335,7 @@ td.left {
     <li>${afterInstallWarranty} Years Operational and Maintenance Warranty On System.</li>
     <li>Warranty On Products Will Depend On The Manufacturer's Terms.</li>
     <li>Any Physical Damage Won't Be Considered In Warranty.</li>
-    <li>If You Have Any Questions Concerning This Invoice, Please Contact Vishnu Desai Patel on: +91 9504395243.</li>
+    <li>If You Have Any Questions Concerning This Invoice, Please Contact Vishnu Desai on: +91 9504395243.</li>
   </ul>
       <div class="declaration">
       <strong>Declaration:</strong><br>

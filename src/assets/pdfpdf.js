@@ -37,7 +37,7 @@ export const pdfpdf = (formData, isLoanModeEnabled) => {
                 subsidyAmmount = (2 * 30000 + (CustomerReqKW - 2) * 18000).toFixed(2)
             }
         };
-    } else if(Customertype === 'Organization') {
+    } else if (Customertype === 'Organization') {
         subsidyAmmount = (CustomerReqKW * 18000).toFixed(2)
     } else {
         subsidyAmmount = 0;
@@ -51,7 +51,7 @@ export const pdfpdf = (formData, isLoanModeEnabled) => {
     const totalInverterBrandCharge = Number(inverterCharges).toFixed(2)
     const totalWithSubsidy = (Number(totalWithTax) + Number(totalMeterCharge) + Number(totalStructureCharge) + Number(totalPanelBrandCharge) + Number(totalInverterBrandCharge)).toFixed(2);
     const randomNumber = Math.floor(10000 + Math.random() * 90000);
-
+    const RoundOffTotalWithSubsidy = Math.round(Number(totalWithSubsidy).toFixed(2));
     return `
   <!DOCTYPE html>
 <html lang="en">
@@ -174,7 +174,7 @@ export const pdfpdf = (formData, isLoanModeEnabled) => {
                     </td>
                     <td colspan="3">
                         <h2>Sita Enterprise</h2>
-                        <p>268,CENTRAL MALL,NAVSARI</p>
+                        <p>G-1, Shiv Darshan Apartment,Opp. Ujjivan Bank, Lunsikui Road, Navsari</p>
                         <p>Vishnu Desai - 9504395243</p>
                         <h4>GSTIN : 24CRHPD3718C2ZA</h4>
                         <p>E-mail: <a href="">sitaenterprise.sales@gmail.com</a></p>
@@ -352,16 +352,16 @@ export const pdfpdf = (formData, isLoanModeEnabled) => {
                             </tr>
                             <tr>
                                 <td rowspan="3" colspan="5" class="left-text"><p> Total in Words : ${converter.toWords(totalWithSubsidy)}</p></td>
+                                <td colspan="2"><p>RoundOff Total</p></td>
+                                <td><p> ₹ ${RoundOffTotalWithSubsidy}</p></td>
+                            </tr>
+                            <tr>
                                 <td colspan="2"><p> Subsidy Get Back</p></td>
                                 <td><p> ₹ ${subsidyAmmount}</p></td>
                             </tr>
                             <tr>
-                                <td colspan="2"><p> Actual System Price</p></td>
-                                <td><p> ₹ ${totalWithSubsidy}</p></td>
-                            </tr>
-                            <tr>
-                                <td colspan="2"><p>Grand Total</p></td>
-                                <td><p> ₹ ${(totalWithSubsidy - subsidyAmmount).toFixed(2)}</p></td>
+                                <td colspan="2"><p>After Subsidy Total</p></td>
+                                <td><p> ₹ ${(RoundOffTotalWithSubsidy - subsidyAmmount).toFixed(2)}</p></td>
                             </tr>
                             </tbody>
                         </table>
